@@ -9,6 +9,7 @@
 %%%%%%%%%%      PACKAGES      %%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage[]{graphicx}                                                                                            % figures
+\usepackage{subcaption}                                                                                            % subfigures
 \usepackage[]{listings}                                                                                            % code
 \usepackage[backend=biber, style=ieee, natbib=true, hyperref=true, citestyle=numeric-comp, sorting=none]{biblatex} % references (use with "\cite[post]{ref}" or "\cites[pre][post]{ref}[pre][post]{ref}..."
 \usepackage[hidelinks]{hyperref}                                                                                   % links within document
@@ -18,11 +19,22 @@
 \usepackage{float}                                                                                                 % force image position
 \usepackage{enumitem}                                                                                              % enumeration lists with letters
 \usepackage{changes}                                                                                               % further text options
+\usepackage{arydshln}                                                                                              % dashed lines
+\usepackage{amsmath}                                                                                               % equation styling
+\usepackage{xpatch}                                                                                                % removing empty bibliography fields
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%   CONFIGURATION    %%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \addbibresource{bibliography.bib}
+\xpatchbibdriver{online}
+	{\printtext[parens]{\usebibmacro{date}}}
+	{\iffieldundef{year}
+		{}
+		{\printtext[parens]{\usebibmacro{date}}}}
+	{}
+	{\typeout{There was an error patching biblatex-ieee (specifically, ieee.bbx's @online driver)}}
+
 \stdpunctuation % enforce correct punctuation in bibliography
 \renewcommand\multicitedelim{\addsemicolon\space} % enforce correct separation of multi-sources
 \setcounter{biburllcpenalty}{7000} \setcounter{biburlucpenalty}{8000} % enforce correct url linebreaks
@@ -45,6 +57,10 @@
 % It is advised to define custom methods to wrap the category. E.g.: \refNote{#1}[1]{\refWithLabel{#1}{note}}
 \newcommand{\refWithLabel}[2]{\hyperref[#2:#1]{\textit{#1}}}
 
+\makeatletter
+\renewcommand*{\@pnumwidth}{3em} % page column width for toc
+\makeatother
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%      CONTENT       %%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -58,7 +74,7 @@
 	\newpage
 	\startcontents
 	%%%%% CONTENT OVERVIEW SECTIONS %%%%%
-	\addOverviewSection{Inhaltsverzeichnis}{\printcontents{}{1}{}}                  % TODO: remove this line, if not needed
+	\addOverviewSection{Inhaltsverzeichnis}{\printcontents{}{1}{}}
 	\addOverviewSection{Abbildungsverzeichnis}{                                     % TODO: remove the next four lines, if not needed
 		\renewcommand{\listfigurename}{}
 		\listoffigures
@@ -68,14 +84,13 @@
 		\renewcommand{\listtablename}{}
 		\listoftables
 	}
-	\addOverviewSection{Vorwort}{\input{sections/foreword.tex}}                     % TODO: remove this line, if not needed
+	\addOverviewSection{Vorwort}{\input{sections/foreword.tex}}
 	\setcounter{romanPageCounter}{\arabic{page}} % save roman page counter
 	\pagenumbering{arabic}
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%%%%%%%%%      CONTENT       %%%%%%%%%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\input{sections/content.tex}
-	% TODO: remove all following lines except "\stopcontents" and "\end{document}" if no appendix is needed
 	\newpage
 	\markboth{}{} % clear old header
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -84,7 +99,9 @@
 	\pagenumbering{Roman}
 	\setcounter{page}{\theromanPageCounter}  % restore roman page counter
 	%%%%% REFERENCES %%%%%
+	\setlength{\emergencystretch}{3em} % enforce correct date linebreaks - this cannot be introduced earlier as it may break other line breaks
 	\addOverviewSection{Literaturverzeichnis}{\printbibliography[heading=none]}
+	% TODO: remove all following lines except "\stopcontents" and "\end{document}" if no appendix is needed
 	%%%%% APPENDIX %%%%%
 	\addOverviewSection{Anhang}{
 		\startcontents[Anhang]
