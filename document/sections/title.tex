@@ -1,15 +1,48 @@
+\newcommand{\titleRule}{
+	\textsc{}\\[0.25cm]
+	\rule[0.5cm]{\textwidth}{0.4pt}
+}
+
 \begin{titlepage}
 	\pagestyle{empty} % no page number on first page
 	\begin{center}
-		\textsc{}\\[5cm]
-		\textsc{\Large Title}\\[2.5cm]
-		\textsc{\Large Subtitle}\\[0.5cm]
-		\textsc{Author Name(s)}\\[0.5cm]
+		\textsc{}\\[1cm]
+		\begin{figure}[H]
+			\centering
+			\includegraphics[scale=0.25]{assets/title/Nordakademie_Logo}
+		\end{figure}
+		\titleRule
+		\textbf{\huge Titel}\\ % TODO
+		\titleRule
+		Thesis zur Erlangung des akademischen Grades\\[0.5cm]
+		\textsc{\Large Bachelor of Science}\\
+		\begin{table}[H]
+			\centering
+			\begin{tabular}{rp{0.05\textwidth}l}
+				\hline
+				&&\\
+				\textsc{\large Autor:} && Autor \\[0.25cm] % TODO
+				E-Mail: && autor@nordakademie.de \\ % TODO
+				&&\\
+				\hline
+				&&\\
+				\textsc{\large Studiengang}: && ... \\[0.25cm] % TODO
+				Zenturie: && ... \\[0.25cm] % TODO
+				Matrikel-Nr.: && ... \\[0.25cm] % TODO
+				Bearbeitungszeitraum: && dd.mm.yyyy - dd.mm.yyyy \\ % TODO
+				&&\\
+				\hline
+				&&\\
+				\textsc{\large Gutachter:} && ... \\[0.25cm] % TODO
+				Zweitgutachter: && ... \\ % TODO
+				&&\\
+				\hline
+				&&\\
+				\textsc{\large Betreuung:} && ... \\[0.25cm] % TODO
+				Unternehmen && ... \\ % TODO
+				&&\\
+				\hline
+			\end{tabular}
+		\end{table}
 	\end{center}
 \end{titlepage}
-
-% If "\textsc" leads to display errors, replace the four lines in the middle with an alternate title format:
-% \textsc{}\\[5cm]
-% {\LARGE Title}\\[2.5cm]
-% {\Huge Subtitle}\\[0.5cm]
-% {\LARGE Author Name(s)}\\[0.5cm]
