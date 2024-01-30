@@ -1,0 +1,8 @@
+\newcommand{\defAbbreviation}[2]{
+	\defWithLabel{#1}{abbrev} & #2 \\
+}
+\newcommand{\refAbbreviation}[1]{\refWithLabel{#1}{abbrev}}
+
+\begin{tabular}{ll}
+	\defAbbreviation{...}{...}
+\end{tabular}

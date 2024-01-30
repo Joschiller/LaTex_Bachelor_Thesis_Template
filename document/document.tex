@@ -1,0 +1,98 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%% FILE CONFIGURATION %%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[a4paper]{scrartcl}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%      PACKAGES      %%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[]{graphicx}                                                                                            % figures
+\usepackage[]{listings}                                                                                            % code
+\usepackage[backend=biber, style=ieee, natbib=true, hyperref=true, citestyle=numeric-comp, sorting=none]{biblatex} % references (use with "\cite[post]{ref}" or "\cites[pre][post]{ref}[pre][post]{ref}..."
+\usepackage[hidelinks]{hyperref}                                                                                   % links within document
+\usepackage{titletoc}                                                                                              % toc
+\usepackage{geometry}                                                                                              % styling
+\usepackage{pdfpages}                                                                                              % pdf import
+\usepackage{float}                                                                                                 % force image position
+\usepackage{enumitem}                                                                                              % enumeration lists with letters
+\usepackage{changes}                                                                                               % further text options
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%   CONFIGURATION    %%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\addbibresource{bibliography.bib}
+\stdpunctuation % enforce correct punctuation in bibliography
+\renewcommand\multicitedelim{\addsemicolon\space} % enforce correct separation of multi-sources
+\setcounter{biburllcpenalty}{7000} \setcounter{biburlucpenalty}{8000} % enforce correct url linebreaks
+\geometry{a4paper, top=2cm, bottom=1cm, left=2cm, right=2cm, includefoot, footskip=1cm}
+\newcommand{\addOverviewSection}[2]{
+	\markboth{}{} % clear old header
+	\section*{#1}
+	\addcontentsline{toc}{section}{\protect\numberline{}#1} % add to toc
+	#2
+	\newpage
+}
+\newcounter{romanPageCounter}
+
+% Defines a reference point for a specific category.
+% E.g., \defWithLabel{My first note}{note} will be displayed as \textit{My first note} and get the label "note:My first note".
+% It is advised to define custom methods to wrap the category. E.g.: \defNote{#1}[1]{\defWithLabel{#1}{note}}
+\newcommand{\defWithLabel}[2]{\textit{#1}\label{#2:#1}}
+% References a previously defined reference point for a specific category.
+% E.g., \refWithLabel{My first note}{note} will be displayed as \textit{My first note} that links to the label "note:My first note".
+% It is advised to define custom methods to wrap the category. E.g.: \refNote{#1}[1]{\refWithLabel{#1}{note}}
+\newcommand{\refWithLabel}[2]{\hyperref[#2:#1]{\textit{#1}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%      CONTENT       %%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%%%%%%%%%       HEADER       %%%%%%%%%%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\pagenumbering{Roman}
+	%%%%% TITLE PAGE %%%%%
+	\include{sections/title.tex}
+	\newpage
+	\startcontents
+	%%%%% CONTENT OVERVIEW SECTIONS %%%%%
+	\addOverviewSection{Inhaltsverzeichnis}{\printcontents{}{1}{}}                  % TODO: remove this line, if not needed
+	\addOverviewSection{Abbildungsverzeichnis}{                                     % TODO: remove the next four lines, if not needed
+		\renewcommand{\listfigurename}{}
+		\listoffigures
+	}
+	\addOverviewSection{Abkürzungsverzeichnis}{\input{sections/abbreviations.tex}}  % TODO: remove this line, if not needed
+	\addOverviewSection{Tabellenverzeichnis}{                                       % TODO: remove the next four lines, if not needed
+		\renewcommand{\listtablename}{}
+		\listoftables
+	}
+	\addOverviewSection{Vorwort}{\input{sections/foreword.tex}}                     % TODO: remove this line, if not needed
+	\setcounter{romanPageCounter}{\arabic{page}} % save roman page counter
+	\pagenumbering{arabic}
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%%%%%%%%%      CONTENT       %%%%%%%%%%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\input{sections/content.tex}
+	% TODO: remove all following lines except "\stopcontents" and "\end{document}" if no appendix is needed
+	\newpage
+	\markboth{}{} % clear old header
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%%%%%%%%%      APPENDIX      %%%%%%%%%%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\pagenumbering{Roman}
+	\setcounter{page}{\theromanPageCounter}  % restore roman page counter
+	%%%%% REFERENCES %%%%%
+	\addOverviewSection{Literaturverzeichnis}{\printbibliography[heading=none]}
+	%%%%% APPENDIX %%%%%
+	\addOverviewSection{Anhang}{
+		\startcontents[Anhang]
+		\printcontents[Anhang]{}{2}{}
+	}
+	\markboth{}{} % clear old header
+	\pagenumbering{arabic}
+	\stopcontents
+	\input{sections/appendix.tex}
+	\stopcontents[Anhang]
+\end{document}
